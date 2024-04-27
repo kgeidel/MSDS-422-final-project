@@ -11,7 +11,7 @@ MSDS 422: Practical Machine learning<br>
 Northwestern University<br>
 June 2, 2024<br>
 </p>
-<br><br>
+<br>
 </p>
 <hr>
 
@@ -19,3 +19,4 @@ June 2, 2024<br>
 - The "wine" dataset can be found openml.org: <br>
 &emsp;&emsp;  https://www.openml.org/search?type=data&status=active&id=973
 
+<hr>
