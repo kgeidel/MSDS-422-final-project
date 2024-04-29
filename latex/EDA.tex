@@ -1,0 +1,1102 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{EDA}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    % \maketitle
+    
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} MSDS 422 \PYZhy{} Section 55}
+\PY{c+c1}{\PYZsh{} Spring \PYZsq{}24}
+\PY{c+c1}{\PYZsh{} Module 05 \PYZhy{} Midpoint check in for final project}
+
+\PY{c+c1}{\PYZsh{} Initial EDA}
+\PY{c+c1}{\PYZsh{} Kevin Geidel}
+
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{os}
+\PY{k+kn}{import} \PY{n+nn}{settings}         \PY{c+c1}{\PYZsh{} runs commands that sets base paths, configures behavors, etc}
+\PY{k+kn}{import} \PY{n+nn}{utils}            \PY{c+c1}{\PYZsh{} defines functions used throughout}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{eda-data-source}{%
+\paragraph{EDA: Data source}\label{eda-data-source}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Load the dataset}
+
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{io}\PY{n+nn}{.}\PY{n+nn}{arff} \PY{k+kn}{import} \PY{n}{loadarff}
+
+\PY{n}{arff\PYZus{}name} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wine.arff}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{n}{raw\PYZus{}data} \PY{o}{=} \PY{n}{loadarff}\PY{p}{(}
+    \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{settings}\PY{o}{.}\PY{n}{DATA\PYZus{}PATH}\PY{p}{,} \PY{n}{arff\PYZus{}name}\PY{p}{)}
+\PY{p}{)}
+\PY{n}{data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{raw\PYZus{}data}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{data}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   Alcohol  Malic\_acid   Ash  Alcalinity\_of\_ash  Magnesium  Total\_phenols  \textbackslash{}
+0    14.23        1.71  2.43               15.6      127.0           2.80
+1    13.20        1.78  2.14               11.2      100.0           2.65
+2    13.16        2.36  2.67               18.6      101.0           2.80
+3    14.37        1.95  2.50               16.8      113.0           3.85
+4    13.24        2.59  2.87               21.0      118.0           2.80
+
+   Flavanoids  Nonflavanoid\_phenols  Proanthocyanins  Color\_intensity   Hue  \textbackslash{}
+0        3.06                  0.28             2.29             5.64  1.04
+1        2.76                  0.26             1.28             4.38  1.05
+2        3.24                  0.30             2.81             5.68  1.03
+3        3.49                  0.24             2.18             7.80  0.86
+4        2.69                  0.39             1.82             4.32  1.04
+
+   OD280/OD315\_of\_diluted\_wines  Proline binaryClass
+0                          3.92   1065.0        b'N'
+1                          3.40   1050.0        b'N'
+2                          3.17   1185.0        b'N'
+3                          3.45   1480.0        b'N'
+4                          2.93    735.0        b'N'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Examine the dataset}
+
+\PY{n}{data}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 178 entries, 0 to 177
+Data columns (total 14 columns):
+ \#   Column                        Non-Null Count  Dtype
+---  ------                        --------------  -----
+ 0   Alcohol                       178 non-null    float64
+ 1   Malic\_acid                    178 non-null    float64
+ 2   Ash                           178 non-null    float64
+ 3   Alcalinity\_of\_ash             178 non-null    float64
+ 4   Magnesium                     178 non-null    float64
+ 5   Total\_phenols                 178 non-null    float64
+ 6   Flavanoids                    178 non-null    float64
+ 7   Nonflavanoid\_phenols          178 non-null    float64
+ 8   Proanthocyanins               178 non-null    float64
+ 9   Color\_intensity               178 non-null    float64
+ 10  Hue                           178 non-null    float64
+ 11  OD280/OD315\_of\_diluted\_wines  178 non-null    float64
+ 12  Proline                       178 non-null    float64
+ 13  binaryClass                   178 non-null    object
+dtypes: float64(13), object(1)
+memory usage: 19.6+ KB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} The target (binaryClass) happens to be the only caterorical (in this case Boolean) variable}
+\PY{c+c1}{\PYZsh{} but still, we look at each one}
+
+\PY{n}{data}\PY{o}{.}\PY{n}{select\PYZus{}dtypes}\PY{p}{(}\PY{n}{include}\PY{o}{=}\PY{p}{[}\PY{n+nb}{object}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+binaryClass
+b'N'           107
+b'P'            71
+Name: count, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} We are going to encode the boolean values later anyways}
+\PY{c+c1}{\PYZsh{} let\PYZsq{}s address this now so we can use the target in the rest of the EDA}
+
+\PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{isWine}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{binaryClass}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+sa}{b}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+sa}{b}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{\PYZcb{}}\PY{p}{)}
+
+\PY{n}{data}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   Alcohol  Malic\_acid   Ash  Alcalinity\_of\_ash  Magnesium  Total\_phenols  \textbackslash{}
+0    14.23        1.71  2.43               15.6      127.0           2.80
+1    13.20        1.78  2.14               11.2      100.0           2.65
+2    13.16        2.36  2.67               18.6      101.0           2.80
+3    14.37        1.95  2.50               16.8      113.0           3.85
+4    13.24        2.59  2.87               21.0      118.0           2.80
+
+   Flavanoids  Nonflavanoid\_phenols  Proanthocyanins  Color\_intensity   Hue  \textbackslash{}
+0        3.06                  0.28             2.29             5.64  1.04
+1        2.76                  0.26             1.28             4.38  1.05
+2        3.24                  0.30             2.81             5.68  1.03
+3        3.49                  0.24             2.18             7.80  0.86
+4        2.69                  0.39             1.82             4.32  1.04
+
+   OD280/OD315\_of\_diluted\_wines  Proline binaryClass  isWine
+0                          3.92   1065.0        b'N'       0
+1                          3.40   1050.0        b'N'       0
+2                          3.17   1185.0        b'N'       0
+3                          3.45   1480.0        b'N'       0
+4                          2.93    735.0        b'N'       0
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{eda-basic-data-structure}{%
+\paragraph{EDA: Basic data structure}\label{eda-basic-data-structure}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Descriptive stats of numerical columns}
+
+\PY{n}{data}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+          Alcohol  Malic\_acid         Ash  Alcalinity\_of\_ash   Magnesium  \textbackslash{}
+count  178.000000  178.000000  178.000000         178.000000  178.000000
+mean    13.000618    2.336348    2.366517          19.494944   99.741573
+std      0.811827    1.117146    0.274344           3.339564   14.282484
+min     11.030000    0.740000    1.360000          10.600000   70.000000
+25\%     12.362500    1.602500    2.210000          17.200000   88.000000
+50\%     13.050000    1.865000    2.360000          19.500000   98.000000
+75\%     13.677500    3.082500    2.557500          21.500000  107.000000
+max     14.830000    5.800000    3.230000          30.000000  162.000000
+
+       Total\_phenols  Flavanoids  Nonflavanoid\_phenols  Proanthocyanins  \textbackslash{}
+count     178.000000  178.000000            178.000000       178.000000
+mean        2.295112    2.029270              0.361854         1.590899
+std         0.625851    0.998859              0.124453         0.572359
+min         0.980000    0.340000              0.130000         0.410000
+25\%         1.742500    1.205000              0.270000         1.250000
+50\%         2.355000    2.135000              0.340000         1.555000
+75\%         2.800000    2.875000              0.437500         1.950000
+max         3.880000    5.080000              0.660000         3.580000
+
+       Color\_intensity         Hue  OD280/OD315\_of\_diluted\_wines      Proline  \textbackslash{}
+count       178.000000  178.000000                    178.000000   178.000000
+mean          5.058090    0.957449                      2.611685   746.893258
+std           2.318286    0.228572                      0.709990   314.907474
+min           1.280000    0.480000                      1.270000   278.000000
+25\%           3.220000    0.782500                      1.937500   500.500000
+50\%           4.690000    0.965000                      2.780000   673.500000
+75\%           6.200000    1.120000                      3.170000   985.000000
+max          13.000000    1.710000                      4.000000  1680.000000
+
+           isWine
+count  178.000000
+mean     0.398876
+std      0.491049
+min      0.000000
+25\%      0.000000
+50\%      0.000000
+75\%      1.000000
+max      1.000000
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Get null counts}
+
+\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}
+    \PY{p}{[}\PY{p}{(}\PY{n}{col}\PY{p}{,} \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{k}{for} \PY{n}{col} \PY{o+ow}{in} \PY{n}{data}\PY{o}{.}\PY{n}{columns}\PY{p}{]}\PY{p}{,} 
+    \PY{n}{columns} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Columns Name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Null Count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                    Columns Name  Null Count
+0                        Alcohol           0
+1                     Malic\_acid           0
+2                            Ash           0
+3              Alcalinity\_of\_ash           0
+4                      Magnesium           0
+5                  Total\_phenols           0
+6                     Flavanoids           0
+7           Nonflavanoid\_phenols           0
+8                Proanthocyanins           0
+9                Color\_intensity           0
+10                           Hue           0
+11  OD280/OD315\_of\_diluted\_wines           0
+12                       Proline           0
+13                   binaryClass           0
+14                        isWine           0
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{eda-initial-visualizations}{%
+\paragraph{EDA: Initial
+visualizations}\label{eda-initial-visualizations}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Make historgrams of the numeric variables for initial visualization}
+
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+
+\PY{n}{data}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{utils}\PY{o}{.}\PY{n}{save\PYZus{}fig}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{attribute\PYZus{}histogram\PYZus{}plots}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{EDA_files/EDA_10_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Check for linear correlations}
+
+\PY{n}{correlations} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{n}{numeric\PYZus{}only}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{correlations}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+isWine                          1.000000
+Hue                             0.353213
+OD280/OD315\_of\_diluted\_wines    0.199813
+Alcalinity\_of\_ash               0.181764
+Proanthocyanins                 0.056208
+Flavanoids                      0.042179
+Nonflavanoid\_phenols            0.011868
+Total\_phenols                  -0.047301
+Malic\_acid                     -0.295175
+Magnesium                      -0.296972
+Ash                            -0.362457
+Proline                        -0.589850
+Color\_intensity                -0.694679
+Alcohol                        -0.726383
+Name: isWine, dtype: float64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} plot scatter plots for interesting columns with promising coefficieients}
+
+\PY{k+kn}{from} \PY{n+nn}{pandas}\PY{n+nn}{.}\PY{n+nn}{plotting} \PY{k+kn}{import} \PY{n}{scatter\PYZus{}matrix}
+
+\PY{n}{scatter\PYZus{}plot\PYZus{}cols} \PY{o}{=} \PY{p}{[}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{isWine}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Hue}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OD280/OD315\PYZus{}of\PYZus{}diluted\PYZus{}wines}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Alcalinity\PYZus{}of\PYZus{}ash}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Alcohol}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Color\PYZus{}intensity}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Nonflavanoid\PYZus{}phenols}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Flavanoids}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{]}
+
+\PY{n}{scatter\PYZus{}matrix}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{n}{scatter\PYZus{}plot\PYZus{}cols}\PY{p}{]}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+\PY{n}{utils}\PY{o}{.}\PY{n}{save\PYZus{}fig}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{scatter\PYZus{}matrix\PYZus{}plot}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} 
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{EDA_files/EDA_12_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} lets examine some graphs up close}
+\PY{c+c1}{\PYZsh{} we are looking for interesting relationships that may not be linear}
+\PY{c+c1}{\PYZsh{} and/or may make for good engineered features.}
+
+\PY{n}{single\PYZus{}scatter\PYZus{}ls} \PY{o}{=} \PY{p}{[}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Color\PYZus{}intensity}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Flavanoids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,} \PY{c+c1}{\PYZsh{} seems to have two distinct groupings}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Alcohol}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Color\PYZus{}intensity}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,}    \PY{c+c1}{\PYZsh{} has very curious shape}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Alcohol}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Flavanoids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,}         \PY{c+c1}{\PYZsh{} also has a hook shape w/ ostensibly distinct clusters}
+\PY{p}{]}
+
+\PY{k}{for} \PY{n}{y}\PY{p}{,} \PY{n}{x} \PY{o+ow}{in} \PY{n}{single\PYZus{}scatter\PYZus{}ls}\PY{p}{:}
+    \PY{n}{data}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{kind}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{scatter}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x}\PY{o}{=}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{y}\PY{p}{)}
+    \PY{n}{utils}\PY{o}{.}\PY{n}{save\PYZus{}fig}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{scatterplot\PYZus{}}\PY{l+s+si}{\PYZob{}}\PY{n}{y}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZus{}over\PYZus{}}\PY{l+s+si}{\PYZob{}}\PY{n}{x}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{EDA_files/EDA_13_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{EDA_files/EDA_13_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{EDA_files/EDA_13_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{69}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} The scatter plots over the dependent variable were odd (it is a binary target)}
+\PY{c+c1}{\PYZsh{} Lets use box plots to prob those relationships instead}
+
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{bp} \PY{o}{=} \PY{n}{ax1}\PY{o}{.}\PY{n}{boxplot}\PY{p}{(}
+    \PY{p}{[}
+        \PY{n}{data}\PY{o}{.}\PY{n}{Hue}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{k+kc}{True}\PY{p}{]}\PY{p}{,} 
+        \PY{n}{data}\PY{o}{.}\PY{n}{Hue}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{k+kc}{False}\PY{p}{]}\PY{p}{,}
+
+        \PY{n}{data}\PY{o}{.}\PY{n}{Flavanoids}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{k+kc}{True}\PY{p}{]}\PY{p}{,} 
+        \PY{n}{data}\PY{o}{.}\PY{n}{Flavanoids}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{k+kc}{False}\PY{p}{]}\PY{p}{,}
+
+        \PY{n}{data}\PY{o}{.}\PY{n}{Alcohol}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{k+kc}{True}\PY{p}{]}\PY{p}{,} 
+        \PY{n}{data}\PY{o}{.}\PY{n}{Alcohol}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{k+kc}{False}\PY{p}{]}\PY{p}{,}
+
+    \PY{p}{]}\PY{p}{,}
+    \PY{n}{notch}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{vert}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{whis}\PY{o}{=}\PY{l+m+mf}{1.5}
+\PY{p}{)}
+\PY{n}{ax1\PYZus{}conf} \PY{o}{=} \PY{n}{ax1}\PY{o}{.}\PY{n}{set}\PY{p}{(}
+    \PY{n}{axisbelow}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}
+    \PY{n}{title}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Distribution of several variables by target label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{xlabel}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Attribute/Label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{ylabel}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value (unscaled)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{xticklabels}\PY{o}{=}\PY{p}{[}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Hue/True}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Hue/False}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Flavanoids/True}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Flavanoids/False}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Alcohol/True}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Alcohol/False}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{p}{]}
+\PY{p}{)}
+\PY{n}{utils}\PY{o}{.}\PY{n}{save\PYZus{}fig}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{box\PYZus{}plots}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{EDA_files/EDA_14_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{eda-engineering-features}{%
+\paragraph{EDA: Engineering features}\label{eda-engineering-features}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{75}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} The scatter plot for Color\PYZus{}intensity over Flavanoids seemed to have two trends present.}
+\PY{c+c1}{\PYZsh{} I wonder what the distributions over their ratio looks like for each}
+\PY{c+c1}{\PYZsh{} value of the target (isWine)}
+
+\PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{color\PYZus{}per\PYZus{}flavanoid}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Color\PYZus{}intensity}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{/} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Flavanoids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} Checking out the original histograms diplayed above we can see the distributions}
+\PY{c+c1}{\PYZsh{} of Flavanoids have the same range for isWine == True and isWine == False}
+\PY{c+c1}{\PYZsh{} but the variablity is quite differenent. Let\PYZsq{}s see if log(Flavanoid) gives}
+\PY{c+c1}{\PYZsh{} us anything interesting.}
+
+\PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{log\PYZus{}flavanoid}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Flavanoids}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+
+
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{bp} \PY{o}{=} \PY{n}{ax1}\PY{o}{.}\PY{n}{boxplot}\PY{p}{(}
+    \PY{p}{[}
+        \PY{n}{data}\PY{o}{.}\PY{n}{color\PYZus{}per\PYZus{}flavanoid}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{k+kc}{True}\PY{p}{]}\PY{p}{,} 
+        \PY{n}{data}\PY{o}{.}\PY{n}{color\PYZus{}per\PYZus{}flavanoid}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{k+kc}{False}\PY{p}{]}\PY{p}{,}
+
+        \PY{n}{data}\PY{o}{.}\PY{n}{log\PYZus{}flavanoid}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{k+kc}{True}\PY{p}{]}\PY{p}{,} 
+        \PY{n}{data}\PY{o}{.}\PY{n}{log\PYZus{}flavanoid}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{isWine}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{k+kc}{False}\PY{p}{]}\PY{p}{,}
+    \PY{p}{]}\PY{p}{,}
+    \PY{n}{notch}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{vert}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{whis}\PY{o}{=}\PY{l+m+mf}{1.5}
+\PY{p}{)}
+\PY{n}{ax1\PYZus{}conf} \PY{o}{=} \PY{n}{ax1}\PY{o}{.}\PY{n}{set}\PY{p}{(}
+    \PY{n}{axisbelow}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}
+    \PY{n}{title}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Distribution of several variables by target label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{xlabel}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Attribute/Label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{ylabel}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value (unscaled)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{xticklabels}\PY{o}{=}\PY{p}{[}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{color\PYZus{}per\PYZus{}flavanoid/True}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{color\PYZus{}per\PYZus{}flavanoid/False}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{log\PYZus{}flavanoid/True}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{log\PYZus{}flavanoid/False}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{p}{]}
+\PY{p}{)}
+\PY{n}{utils}\PY{o}{.}\PY{n}{save\PYZus{}fig}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{box\PYZus{}plots\PYZus{}new\PYZus{}features}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{n}{data}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{color\PYZus{}per\PYZus{}flavanoid}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{log\PYZus{}flavanoid}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{isWine}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{isWine}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{EDA_files/EDA_16_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+isWine                 1.000000
+log\_flavanoid          0.172148
+color\_per\_flavanoid   -0.467811
+Name: isWine, dtype: float64
+    \end{Verbatim}
+
+    \hypertarget{ml-pipeline-data-preparation}{%
+\paragraph{ML Pipeline: Data
+preparation}\label{ml-pipeline-data-preparation}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Create a Test Set }
+
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{model\PYZus{}selection} \PY{k+kn}{import} \PY{n}{train\PYZus{}test\PYZus{}split}
+
+\PY{n}{test\PYZus{}ratio} \PY{o}{=} \PY{l+m+mf}{0.15}       \PY{c+c1}{\PYZsh{} Let\PYZsq{}s set aside 15\PYZpc{} of the records for testing}
+
+\PY{n}{random\PYZus{}seed} \PY{o}{=} \PY{l+m+mi}{1}         \PY{c+c1}{\PYZsh{} To prevent data leakage I will set a seed while developing}
+                        \PY{c+c1}{\PYZsh{} so random\PYZus{}seed = 1 will give me the same train/test split over and over}
+\PY{c+c1}{\PYZsh{} random\PYZus{}seed = None      \PYZsh{} but use a fresh seed (seed=None) when its time to submit}
+            
+\PY{c+c1}{\PYZsh{} Set some test\PYZus{}data aside (and not look at it until very end!)}
+\PY{n}{training\PYZus{}data}\PY{p}{,} \PY{n}{test\PYZus{}data} \PY{o}{=} \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{test\PYZus{}size}\PY{o}{=}\PY{n}{test\PYZus{}ratio}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{random\PYZus{}seed}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Take labels off training\PYZus{}data}
+\PY{n}{x\PYZus{}training} \PY{o}{=} \PY{n}{training\PYZus{}data}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{isWine}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{binaryClass}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{training\PYZus{}labels} \PY{o}{=} \PY{n}{training\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{isWine}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+
+
+\PY{n}{x\PYZus{}training}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     Alcohol  Malic\_acid   Ash  Alcalinity\_of\_ash  Magnesium  Total\_phenols  \textbackslash{}
+29     14.02        1.68  2.21               16.0       96.0           2.65
+16     14.30        1.92  2.72               20.0      120.0           2.80
+147    12.87        4.61  2.48               21.5       86.0           1.70
+97     12.29        1.41  1.98               16.0       85.0           2.55
+159    13.48        1.67  2.64               22.5       89.0           2.60
+..       {\ldots}         {\ldots}   {\ldots}                {\ldots}        {\ldots}            {\ldots}
+133    12.70        3.55  2.36               21.5      106.0           1.70
+137    12.53        5.51  2.64               25.0       96.0           1.79
+72     13.49        1.66  2.24               24.0       87.0           1.88
+140    12.93        2.81  2.70               21.0       96.0           1.54
+37     13.05        1.65  2.55               18.0       98.0           2.45
+
+     Flavanoids  Nonflavanoid\_phenols  Proanthocyanins  Color\_intensity   Hue  \textbackslash{}
+29         2.33                  0.26             1.98             4.70  1.04
+16         3.14                  0.33             1.97             6.20  1.07
+147        0.65                  0.47             0.86             7.65  0.54
+97         2.50                  0.29             1.77             2.90  1.23
+159        1.10                  0.52             2.29            11.75  0.57
+..          {\ldots}                   {\ldots}              {\ldots}              {\ldots}   {\ldots}
+133        1.20                  0.17             0.84             5.00  0.78
+137        0.60                  0.63             1.10             5.00  0.82
+72         1.84                  0.27             1.03             3.74  0.98
+140        0.50                  0.53             0.75             4.60  0.77
+37         2.43                  0.29             1.44             4.25  1.12
+
+     OD280/OD315\_of\_diluted\_wines  Proline
+29                           3.59   1035.0
+16                           2.65   1280.0
+147                          1.86    625.0
+97                           2.74    428.0
+159                          1.78    620.0
+..                            {\ldots}      {\ldots}
+133                          1.29    600.0
+137                          1.69    515.0
+72                           2.78    472.0
+140                          2.31    600.0
+37                           2.51   1105.0
+
+[151 rows x 13 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{58}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Cleaning begins with null/missing values}
+
+\PY{n}{null\PYZus{}rows\PYZus{}idx} \PY{o}{=} \PY{n}{x\PYZus{}training}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{any}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} We confirm what we discovered above, no missing values in this dataset}
+\PY{c+c1}{\PYZsh{} (For when we move to abstraction later, I will still include an imputer)}
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{n}{null\PYZus{}rows\PYZus{}idx}\PY{p}{[}\PY{n}{null\PYZus{}rows\PYZus{}idx}\PY{o}{==}\PY{k+kc}{True}\PY{p}{]}\PY{o}{.}\PY{n}{shape}
+\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(0,)
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{61}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} lets build the preprocessing pipeline for numerical features}
+
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{pipeline} \PY{k+kn}{import} \PY{n}{Pipeline}\PY{p}{,} \PY{n}{make\PYZus{}pipeline}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{preprocessing} \PY{k+kn}{import} \PY{n}{StandardScaler}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{impute} \PY{k+kn}{import} \PY{n}{SimpleImputer}
+
+\PY{n}{numeric\PYZus{}pipeline} \PY{o}{=} \PY{n}{Pipeline}\PY{p}{(}\PY{p}{[}
+    \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{impute}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{SimpleImputer}\PY{p}{(}\PY{n}{strategy}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{median}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{standardize}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{StandardScaler}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{62}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} this example use case is not using caterorical features}
+\PY{c+c1}{\PYZsh{} but this is how we could construct the pipline for those:}
+
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{impute} \PY{k+kn}{import} \PY{n}{SimpleImputer}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{preprocessing} \PY{k+kn}{import} \PY{n}{OneHotEncoder}\PY{p}{,} \PY{n}{OrdinalEncoder}
+
+\PY{n}{categoric\PYZus{}pipeline} \PY{o}{=} \PY{n}{Pipeline}\PY{p}{(}\PY{p}{[}
+    \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ordinal\PYZus{}encoder}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{OrdinalEncoder}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{impute}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{SimpleImputer}\PY{p}{(}\PY{n}{strategy}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{most\PYZus{}frequent}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{encode}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{OneHotEncoder}\PY{p}{(}\PY{n}{handle\PYZus{}unknown}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{63}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} A ColumnTransformer can make a single pipeline}
+
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{compose} \PY{k+kn}{import} \PY{n}{make\PYZus{}column\PYZus{}selector}\PY{p}{,} \PY{n}{make\PYZus{}column\PYZus{}transformer}
+
+\PY{n}{preprocessing} \PY{o}{=} \PY{n}{make\PYZus{}column\PYZus{}transformer}\PY{p}{(}
+    \PY{p}{(}\PY{n}{numeric\PYZus{}pipeline}\PY{p}{,} \PY{n}{make\PYZus{}column\PYZus{}selector}\PY{p}{(}\PY{n}{dtype\PYZus{}include}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{number}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{n}{categoric\PYZus{}pipeline}\PY{p}{,} \PY{n}{make\PYZus{}column\PYZus{}selector}\PY{p}{(}\PY{n}{dtype\PYZus{}include}\PY{o}{=}\PY{n+nb}{object}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+\PY{p}{)}
+
+\PY{n}{preprocessing}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{63}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ColumnTransformer(transformers=[('pipeline-1',
+                                 Pipeline(steps=[('impute',
+SimpleImputer(strategy='median')),
+                                                 ('standardize',
+                                                  StandardScaler())]),
+<sklearn.compose.\_column\_transformer.make\_column\_selector object at
+0x7ff32accb450>),
+                                ('pipeline-2',
+                                 Pipeline(steps=[('ordinal\_encoder',
+                                                  OrdinalEncoder()),
+                                                 ('impute',
+SimpleImputer(strategy='most\_frequent')),
+                                                 ('encode',
+OneHotEncoder(handle\_unknown='ignore'))]),
+<sklearn.compose.\_column\_transformer.make\_column\_selector object at
+0x7ff32accb210>)])
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{64}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} We can test our preprocessing pipeline on our training data.}
+
+\PY{n}{training\PYZus{}data\PYZus{}cleaned} \PY{o}{=} \PY{n}{preprocessing}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{x\PYZus{}training}\PY{p}{)}
+
+\PY{n}{training\PYZus{}data\PYZus{}cleaned\PYZus{}df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}
+    \PY{n}{training\PYZus{}data\PYZus{}cleaned}\PY{p}{,}
+    \PY{n}{columns}\PY{o}{=}\PY{n}{preprocessing}\PY{o}{.}\PY{n}{get\PYZus{}feature\PYZus{}names\PYZus{}out}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+    \PY{n}{index}\PY{o}{=}\PY{n}{training\PYZus{}data}\PY{o}{.}\PY{n}{index}
+\PY{p}{)}
+
+\PY{n}{training\PYZus{}data\PYZus{}cleaned\PYZus{}df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{64}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     pipeline-1\_\_Alcohol  pipeline-1\_\_Malic\_acid  pipeline-1\_\_Ash  \textbackslash{}
+29              1.259587               -0.619230        -0.535083
+16              1.603015               -0.410962         1.316905
+147            -0.150920                1.923377         0.445381
+97             -0.862306               -0.853531        -1.370293
+159             0.597262               -0.627908         1.026397
+
+     pipeline-1\_\_Alcalinity\_of\_ash  pipeline-1\_\_Magnesium  \textbackslash{}
+29                       -1.063608              -0.207330
+16                        0.151484               1.535977
+147                       0.607144              -0.933709
+97                       -1.063608              -1.006346
+159                       0.910916              -0.715795
+
+     pipeline-1\_\_Total\_phenols  pipeline-1\_\_Flavanoids  \textbackslash{}
+29                    0.589146                0.337732
+16                    0.827519                1.147851
+147                  -0.920554               -1.342516
+97                    0.430230                0.507757
+159                   0.509688               -0.892449
+
+     pipeline-1\_\_Nonflavanoid\_phenols  pipeline-1\_\_Proanthocyanins  \textbackslash{}
+29                          -0.874546                     0.710735
+16                          -0.286882                     0.693358
+147                          0.888445                    -1.235501
+97                          -0.622690                     0.345816
+159                          1.308205                     1.249426
+
+     pipeline-1\_\_Color\_intensity  pipeline-1\_\_Hue  \textbackslash{}
+29                     -0.165290         0.365559
+16                      0.455370         0.494389
+147                     1.055342        -1.781607
+97                     -0.910082         1.181482
+159                     2.751813        -1.652777
+
+     pipeline-1\_\_OD280/OD315\_of\_diluted\_wines  pipeline-1\_\_Proline
+29                                   1.405185             0.963100
+16                                   0.085971             1.769644
+147                                 -1.022730            -0.386627
+97                                   0.212279            -1.035154
+159                                 -1.135004            -0.403087
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{deployment-model-selection-without-data-transformations}{%
+\paragraph{Deployment: Model selection (without data
+transformations)}\label{deployment-model-selection-without-data-transformations}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} This is where next work will resume...}
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}

@@ -12,10 +12,9 @@ BASE_PATH = os.path.dirname(os.getcwd())
 DATA_PATH = os.path.join(BASE_PATH, 'data')
 
 #### pyplot settings
-
-plt.rc('font', size=14)
-plt.rc('axes', labelsize=14, titlesize=14)
-plt.rc('legend', fontsize=14)
+plt.rc('font', size=10)
+plt.rc('axes', labelsize=10, titlesize=10)
+plt.rc('legend', fontsize=10)
 plt.rc('xtick', labelsize=10)
 plt.rc('ytick', labelsize=10)
 
