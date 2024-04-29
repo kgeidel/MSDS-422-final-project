@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: 'MSDS 422: Final Project'
+message: >-
+  My final project for MSDS 422, Spring 2024.
+type: software
+authors:
+  - given-names: Kevin
+    family-names: Geidel
+    email: kevingeidel2024@u.northwestern.edu
+    affiliation: Northwestern University
